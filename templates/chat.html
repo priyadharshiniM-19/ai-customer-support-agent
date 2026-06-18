@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ask About Our Restaurant</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="sidebar">
+
+        <div class="profile-section">
+            <div class="avatar">
+                {{ username[0].upper() }}
+            </div>
+
+            <div>
+                <h3>{{ username }}</h3>
+
+                <a class="logout-btn" href="/logout">
+                    Logout
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="main">
+
+        <div class="header">
+            <h1>Ask About Our Restaurant</h1>
+            <p>Menu, pizzas, reviews and recommendations.</p>
+        </div>
+
+        <div id="chat-box">
+
+            {% for chat in chats %}
+
+            <div class="user-message">
+                {{ chat.question }}
+            </div>
+
+            <div class="bot-message">
+                {{ chat.answer }}
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="input-area">
+
+            <input
+                id="question"
+                type="text"
+                placeholder="Ask anything about our restaurant..."
+            >
+
+            <button onclick="sendMessage()">
+                Send
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

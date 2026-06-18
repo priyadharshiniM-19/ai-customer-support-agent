@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+
+users.db
+
+chroma_langchain_db/
+
+.vscode/
+
+.env
