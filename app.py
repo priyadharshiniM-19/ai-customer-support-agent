@@ -7,7 +7,8 @@ from database import (
     create_user,
     get_user_by_email,
     save_chat,
-    get_chat_history
+    get_chat_history,
+    get_recent_chat_history
 )
 
 from ai import get_ai_response
@@ -21,6 +22,7 @@ init_db()
 
 @app.route("/")
 def home():
+
     if "user_id" in session:
         return redirect(url_for("chat"))
 
@@ -111,7 +113,15 @@ def ask():
 
     question = request.json["question"]
 
-    answer = get_ai_response(question)
+    recent_chats = get_recent_chat_history(
+        session["user_id"],
+        limit=5
+    )
+
+    answer = get_ai_response(
+        question,
+        recent_chats
+    )
 
     save_chat(
         session["user_id"],

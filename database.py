@@ -63,6 +63,7 @@ def get_user_by_email(email):
     )
 
     user = cursor.fetchone()
+
     conn.close()
 
     return user
@@ -99,6 +100,29 @@ def get_chat_history(user_id):
     )
 
     chats = cursor.fetchall()
+
     conn.close()
 
     return chats
+
+
+def get_recent_chat_history(user_id, limit=5):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT question, answer
+        FROM chats
+        WHERE user_id = ?
+        ORDER BY id DESC
+        LIMIT ?
+        """,
+        (user_id, limit)
+    )
+
+    chats = cursor.fetchall()
+
+    conn.close()
+
+    return list(reversed(chats))

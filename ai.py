@@ -5,14 +5,17 @@ from vector import retriever
 model = OllamaLLM(model="llama3.2:3b")
 
 template = """
-You are an expert assistant for XX Pizza Restaurant.
+You are a helpful assistant for our restaurant.
 
-Answer ONLY using the restaurant reviews provided below.
+Use the restaurant reviews and previous conversation to answer naturally.
 
-Reviews:
+Previous Conversation:
+{chat_history}
+
+Restaurant Reviews:
 {reviews}
 
-Question:
+Current Question:
 {question}
 
 Answer:
@@ -23,13 +26,37 @@ prompt = ChatPromptTemplate.from_template(template)
 chain = prompt | model
 
 
-def get_ai_response(question):
+def format_chat_history(chats):
+
+    if not chats:
+        return "No previous conversation."
+
+    conversation = []
+
+    for chat in chats:
+
+        conversation.append(
+            f"User: {chat['question']}"
+        )
+
+        conversation.append(
+            f"Assistant: {chat['answer']}"
+        )
+
+    return "\n".join(conversation)
+
+
+def get_ai_response(question, chats):
+
     reviews = retriever.invoke(question)
+
+    chat_history = format_chat_history(chats)
 
     response = chain.invoke(
         {
             "reviews": reviews,
-            "question": question
+            "question": question,
+            "chat_history": chat_history
         }
     )
 

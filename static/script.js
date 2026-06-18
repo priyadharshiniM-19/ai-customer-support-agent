@@ -46,3 +46,19 @@ async function sendMessage() {
 
     chatBox.scrollTop = chatBox.scrollHeight;
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const input = document.getElementById("question");
+
+    input.addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            sendMessage();
+        }
+    });
+
+});
